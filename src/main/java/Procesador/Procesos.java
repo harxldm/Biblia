@@ -1,62 +1,40 @@
 package Procesador;
 
-import EstructurasDeDatos.TablaDeSimbolos;
+import EstructurasDeDatos.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.Normalizer;
 
 public class Procesos {
-    TablaDeSimbolos tablaLimpia = null;
-    public void crearTablaDeSimbolos(String filePath) throws IOException {
-        TablaDeSimbolos<String, Integer> tabla = new TablaDeSimbolos<>();
-
-        Files.readAllLines(Path.of(filePath)).forEach(linea -> {
-            String lineaLimpia = limpiarTexto(linea);
-            String[] palabras = lineaLimpia.split("\\s+");
-
-            for (String palabra : palabras) {
-                if (!palabra.isEmpty()) {
-                    Integer actual = tabla.get(palabra);
-                    if (actual == null) {
-                        tabla.put(palabra, 1);
-                    } else {
-                        tabla.put(palabra, actual + 1);
-                    }
-                }
-            }
-        });
-
-        tablaLimpia = tabla;
+    
+    public String leerArchivo(String rutaArchivo) {
+        Path path = Paths.get(rutaArchivo);
+        try {
+            return new String(Files.readAllBytes(path));
+        } catch (IOException e) {
+            throw new RuntimeException("Error al leer el archivo: " + rutaArchivo, e);
+        }
     }
-
-    private String limpiarTexto(String texto) {
+    
+    public String limpiarTexto(String texto) {
         String textoSinTildes = Normalizer.normalize(texto, Normalizer.Form.NFD)
                 .replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
         return textoSinTildes.replaceAll("[^\\p{L}\\p{Zs}]", "").toLowerCase();
     }
     
-    public TablaDeSimbolos mostrarTabla() {
-        return tablaLimpia;
-    }
-    
-    public int contarTotalPalabras() {
-        int total = 0;
-        for (Object palabra : tablaLimpia.getKeys()) {
-            Integer count = (Integer) tablaLimpia.get(palabra);
-            if (count != null) {
-                total += count;
-            }
+    public static List<String> convertirStringALista(String texto) {
+        String[] palabras = texto.trim().split("\\s+");
+        List<String> lista = new List<>(palabras.length); 
+
+        for (int i = 0; i < palabras.length; i++) {
+            lista.add(palabras[i], i); 
         }
-        return total;
-    }
 
-    public int contarOcurrencias(String palabra) {
-        palabra = limpiarTexto(palabra);
-        Integer count = (Integer) tablaLimpia.get(palabra);
-        return count != null ? count : 0;
+        return lista;
     }
-
     
-
+    
+    
 }

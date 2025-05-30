@@ -8,8 +8,11 @@ public class Biblia {
     Scanner scanner = new Scanner(System.in);
     Procesos procesos;
 
-    public Biblia(Procesos procesos) {
-        this.procesos = procesos;
+    private void prepararArchivo() {
+        String contenido;
+        Procesos procesos = new Procesos();
+        contenido = procesos.leerArchivo("C:/Users/harxl/Documents/NetBeansProjects/Biblia/src/main/java/Archivos/biblia.txt");
+        System.out.println("Contenido final:" + procesos.limpiarTexto(contenido));
     }
 
     private void menu() {
@@ -22,12 +25,13 @@ public class Biblia {
         scanner.nextLine(); // limpiar buffer
         switch (opcion) {
             case 1:
-                System.out.println("Palabras en la biblia: " + procesos.contarTotalPalabras());
+                //System.out.println("Palabras en la biblia: " + procesos.contarTotalPalabras());
+                
                 break;
             case 2:
-                System.out.print("Ingrese palabra: ");
-                String palabra = scanner.nextLine();
-                System.out.println("Ocurre: " + procesos.contarOcurrencias(palabra));
+                //System.out.print("Ingrese palabra: ");
+                //String palabra = scanner.nextLine();
+                //System.out.println("Ocurre: " + procesos.contarOcurrencias(palabra));
                 break;
             case 3:
                 
@@ -38,14 +42,12 @@ public class Biblia {
     }
 
     public static void main(String[] args) throws IOException {
-        try {
-        Procesos procesos = new Procesos();
-        procesos.crearTablaDeSimbolos("C:/Users/harxl/Documents/NetBeansProjects/Biblia/src/main/java/Archivos/biblia.txt");
-        Biblia interfaz = new Biblia(procesos);
+      
+        //Procesos procesos = new Procesos();
+        //procesos.leerArchivo("C:/Users/harxl/Documents/NetBeansProjects/Biblia/src/main/java/Archivos/biblia.txt");
+        Biblia interfaz = new Biblia();
+        interfaz.prepararArchivo();
         interfaz.menu();
-    } catch (Exception e) {
-        System.err.println("🔥 Error en tiempo de ejecución:");
-        e.printStackTrace();
-    }
+    
     }
 }
